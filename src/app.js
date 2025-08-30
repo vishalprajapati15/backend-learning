@@ -21,6 +21,17 @@ app.use(cookieParser());
 
 
 
+//routes import
+import userRouter from './routes/user.routes.js'
+
+//routes declearation
+
+// use app.use() not app.get() bcz router ko alag laya gaya ahi
+app.use('/api/v1/users', userRouter)
+// it looks like  https://localhost:8000/api/v1/users/'userRouter(register)'
+
+
+
 
 
 export {app}
