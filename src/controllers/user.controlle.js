@@ -16,14 +16,8 @@ const registerUser = asyncHandler( async (req, res) =>{
     return response 
     */
 
-
     // get user details fom frontend
     const {fullName, email, username, password} = req.body
-    console.log('FullName : ', fullName)
-    console.log('Email : ', email)
-    console.log('username : ', username)
-    console.log('Password : ', password)
-
 
     // validation -not empty
 
@@ -48,10 +42,16 @@ const registerUser = asyncHandler( async (req, res) =>{
         throw new ApiError(409, 'User with email or username  already exists.')
     }
 
+    // console.log('req.files : ', req.files)
 
+ 
     // check for images and avatar upload them to cloudinary
     const avatarLocalPath = req.files?.avatar[0]?.path;                  // req.files is multer method 
-    const coverImageLocalPath = req.files?.coverImage[0]?.path 
+    // const coverImageLocalPath = req.files?.coverImage[0]?.path          //it show an error if cover image is not send. alternate option is following
+    let coverImageLocalPath ;
+    if(req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0){
+        coverImageLocalPath = req.files.coverImage[0].path                            // this method doesn't throw any error if cover image is not send, in db it store an empty string in front of coverImage if coverImage is not send   
+    }
 
     if (!avatarLocalPath) {
         throw new ApiError(400, 'Avatar file is required.')

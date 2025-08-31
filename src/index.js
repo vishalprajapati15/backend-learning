@@ -5,7 +5,7 @@ import connectDB from "./db/index.js";
 import { app } from './app.js';
 
 dotenv.config({
-    path: './env'   // -r dotenv/config --experimental-json-modules ye package.json me add hua hai iske karan
+    path: './.env'   // -r dotenv/config --experimental-json-modules ye package.json me add hua hai iske karan
 });
 
 connectDB()  // it is an async function, jab bhi complete hota hai to ek promise return krta hai 

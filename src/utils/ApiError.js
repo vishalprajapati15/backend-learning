@@ -12,7 +12,7 @@ class ApiError extends Error{  // this (apiError) class extends the built-in Err
         this.success= false             //for APIs, usually false on error
         this.errors = errors
 
-        if(statck){
+        if(stack){
             this.stack = stack          //custom stack trace if passed
         }
         else{
