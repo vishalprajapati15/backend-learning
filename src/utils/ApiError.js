@@ -23,6 +23,6 @@ class ApiError extends Error{  // this (apiError) class extends the built-in Err
 }
 
 
-export {ApiError }
+export {ApiError}
 
 // this is used in throw structured errors
