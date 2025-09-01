@@ -1,8 +1,8 @@
 // asyncHnadler using promise
 
-const asyncHandler = (requestHnadler )=>{
+const asyncHandler = (requestHandler )=>{
     return (req, res, next) => {
-        Promise.resolve(requestHnadler(req, res, next ))
+        Promise.resolve(requestHandler(req, res, next ))
         .catch((err) => next(err));
     }
 }

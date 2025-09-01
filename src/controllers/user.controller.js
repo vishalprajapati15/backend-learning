@@ -118,14 +118,14 @@ const loginUser = asyncHandler(async (req, res) => {
     */
 
     // get data from req.body
-    const {userName, email, password} = req.body
+    const {username, email, password} = req.body
     // check username and email or
-    if(!userName || !email){        // check if username or email exists
-        throw new ApiError(400, 'Username and email is required.')  //if not exist throw an error
+    if(!username && !email){        // check if both username and email are missing (at least one should be provided)
+        throw new ApiError(400, 'Username or email is required.')  //if both are missing throw an error
     }
     //find the user in db
     const user = await User.findOne({
-        $or: [{userName}, {email}]
+        $or: [{username}, {email}]
     })
 
     if (!user){ 
@@ -162,8 +162,29 @@ const loginUser = asyncHandler(async (req, res) => {
 })
 
 const logoutUser = asyncHandler(async(req, res) =>{
-    
+    await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $unset: {
+                refreshToken: 1 // this removes the field from document
+            }
+        },
+        {
+            new: true
+        }
+    )
+
+    const options = {
+        httpOnly: true,
+        secure: true
+    }
+
+    return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json(new ApiResponse(200, {}, "User logged Out"))
 })
 
 
-export { registerUser, loginUser }
+export { registerUser, loginUser, logoutUser }
