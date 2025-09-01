@@ -5,6 +5,22 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
 
+const generateAccessAndRefreshToken = async(userId) => {
+    try {
+        const user = await User.findById(userId)
+        const accessToken = user.generateAccessToken()
+        const refreshToken =  user.generateRefreshToken()
+
+        user.refreshToken = refreshToken
+        await user.save({validateBeforeSave:false}) // it skip validation while saving user data (required field) like (password, etc.)
+
+        return {accessToken, refreshToken}
+
+    } catch (error) {
+        throw new ApiError(500, 'Something went wrong while generating refresh and acsess token.')
+    }
+}
+
 const registerUser = asyncHandler( async (req, res) =>{
    /* get user details fom frontend
     validation -not empty
@@ -91,5 +107,63 @@ const registerUser = asyncHandler( async (req, res) =>{
 
 })
 
+const loginUser = asyncHandler(async (req, res) => {
+    /*get data from req.body
+    username and email or 
+    find the user  
+    if user exist check password
+    generate access and refresh token and send to user
+    send cookie
+    send response
+    */
 
-export {registerUser}
+    // get data from req.body
+    const {userName, email, password} = req.body
+    // check username and email or
+    if(!userName || !email){        // check if username or email exists
+        throw new ApiError(400, 'Username and email is required.')  //if not exist throw an error
+    }
+    //find the user in db
+    const user = await User.findOne({
+        $or: [{userName}, {email}]
+    })
+
+    if (!user){ 
+        throw new ApiError(404, 'User does not exist')      //if user does not exist in db throw an error
+    }
+    // check user's password is correct or not
+    const isPasswordValid = await user.isPasswordCorrect(password)          
+    //if passwor is incorrect
+    if (!isPasswordValid) {
+        throw new ApiError(401, 'Invalid user password.') 
+    }
+    // generate access and refresh token
+    const {accessToken, refreshToken} = await generateAccessAndRefreshToken(user._id)      //this give accessToken and refreshToken 
+    // remove password and refreshToken from loggedUser object
+    const loggedUser = await User.findById(user._id).select("-password -refreshToken")
+
+    const options = {
+        httpOnly:true,
+        secure:true,
+    }       //(Not modifiable cookies) by use of this options object,  only server can modify cookies; not user from frontend
+
+    return res.status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)      // you can send multiple cookies (like this) user cannot modify these tokens
+    .json(
+        new ApiResponse(
+            200,
+            {
+                user: loggedUser, accessToken, refreshToken    // if user want to save these data in local storage 
+            } ,
+            'User Logged in successfully!!'
+        )
+    )
+})
+
+const logoutUser = asyncHandler(async(req, res) =>{
+    
+})
+
+
+export { registerUser, loginUser }
