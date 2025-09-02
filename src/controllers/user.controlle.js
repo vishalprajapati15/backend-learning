@@ -102,7 +102,7 @@ const registerUser = asyncHandler( async (req, res) =>{
 
     // return response 
     return res.status(201).json(
-        new ApiResponse(200, createdUser, 'User registered successfully  !!!')
+        new ApiResponse(201, createdUser, 'User registered successfully  !!!')
     )
 
 })
@@ -118,22 +118,29 @@ const loginUser = asyncHandler(async (req, res) => {
     */
 
     // get data from req.body
-    const {userName, email, password} = req.body
+    const {username, email, password} = req.body
+
     // check username and email or
-    if(!userName || !email){        // check if username or email exists
+
+    if(!username && !email){        // check if username or email exists
         throw new ApiError(400, 'Username and email is required.')  //if not exist throw an error
     }
     //find the user in db
     const user = await User.findOne({
-        $or: [{userName}, {email}]
+        $or: [{username}, {email}]
     })
 
     if (!user){ 
         throw new ApiError(404, 'User does not exist')      //if user does not exist in db throw an error
     }
+    
     // check user's password is correct or not
-    const isPasswordValid = await user.isPasswordCorrect(password)          
+
+    const isPasswordValid = await user.isPasswordCorrect(password)  
+    // console.log(isPasswordValid)
+
     //if passwor is incorrect
+
     if (!isPasswordValid) {
         throw new ApiError(401, 'Invalid user password.') 
     }
@@ -162,8 +169,26 @@ const loginUser = asyncHandler(async (req, res) => {
 })
 
 const logoutUser = asyncHandler(async(req, res) =>{
-    
+    await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set:{refreshToken: undefined}
+        },
+        {
+            new:true    // in response it provide new updated value
+        }
+    )
+
+    const options = {
+        httpOnly:true,
+        secure:true,
+    }
+
+    return res.status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json(new ApiResponse(200, {}, "User Logged Out!!"))
 })
 
 
-export { registerUser, loginUser }
+export { registerUser, loginUser, logoutUser}

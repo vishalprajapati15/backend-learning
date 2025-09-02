@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { registerUser } from "../controllers/user.controlle.js";
+import { loginUser, logoutUser, registerUser } from "../controllers/user.controlle.js";
 import { upload } from "../middlewares/multer.middleware.js";
+import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 
 
@@ -20,6 +21,12 @@ router.route('/register').post(
     ]),
     registerUser
 )
+
+router.route('/login').post(loginUser)
+
+// secure routes 
+// Note middleware ka reference provide krte hai execute nhi
+router.route('/logout').post(verifyJWT ,logoutUser)     // verifyJWT middleware added before logout user
 
 
 
