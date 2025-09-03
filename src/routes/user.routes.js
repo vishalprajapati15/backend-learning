@@ -26,7 +26,7 @@ router.route('/login').post(loginUser)
 
 // secure routes 
 // Note middleware ka reference provide krte hai execute nhi
-router.route('/logout').post(verifyJWT ,logoutUser)     // verifyJWT middleware added before logout user
+router.route('/logout').post(verifyJWT ,logoutUser)     // verifyJWT middleware added before logout user  
 
 router.route('/refresh-token').post(refreshAccessToken)
 
