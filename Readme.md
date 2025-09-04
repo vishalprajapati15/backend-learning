@@ -1,5 +1,5 @@
 
-# Backend Youtub Project
+# CreatorHub_API Project
 
 A Node.js backend application designed as a learning project for building scalable APIs with Express, MongoDB, and other modern backend technologies.
 
