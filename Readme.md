@@ -110,8 +110,8 @@ creatorHub_API-main/
 | POST   | `/api/v1/users/signup`   | Create a new user with avatar upload  |           No             |
 | POST   | `/api/v1/users/login`    | Login a user                          |           No             |
 | POST   | `/api/v1/users/logout`   | Logout existing user                  |           Yes            |
-| POST   | `/api/v1/users/update`   | Update user profile fields and image  |           Yes            |
-| GET    | `/api/v1/users/:id`      | Get user details                      |           YEs            |
+| PATCH  | `/api/v1/users/update`   | Update user profile fields and image  |           Yes            |
+| GET    | `/api/v1/users/:id`      | Get user details                      |           Yes            |
 
 
 ---
