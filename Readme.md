@@ -8,8 +8,8 @@ A Node.js backend application designed as a learning project for building scalab
 ## 📂 Project Structure
 
 ```
-backend-learning-main/
-backend-learning-main/
+creatorHub_API-main/
+creatorHub_API-main/
 ├── .gitignore
 ├── .prettierignore
 ├── .prettierrc
