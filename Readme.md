@@ -72,7 +72,7 @@ backend-learning-main/
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/backend-learning-main.git
+   git clone https://github.com/your-username/creatorHub_API-main.git
    cd backend-learning-main
    ```
 
