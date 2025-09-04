@@ -1,5 +1,5 @@
 
-# Backend Learning Project
+# Backend Youtub Project
 
 A Node.js backend application designed as a learning project for building scalable APIs with Express, MongoDB, and other modern backend technologies.
 
@@ -126,15 +126,3 @@ backend-learning-main/
 
 - **Temporary Storage:**  
   Uploaded images are first stored temporarily in `/public/temp/` and then uploaded to Cloudinary.
-
----
-
-## 🤝 Contributing
-
-Feel free to fork this project, raise issues, and submit PRs to improve functionality.
-
----
-
-## 📜 License
-
-This project is open-source and available under the **MIT License**.
