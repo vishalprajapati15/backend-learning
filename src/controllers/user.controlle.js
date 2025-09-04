@@ -351,7 +351,7 @@ const updateUserAvatar = asyncHandler(async(req, res) =>{
 })
 
 
-const updateCoverImageAvatar = asyncHandler(async(req, res) =>{
+const updateCoverImage = asyncHandler(async(req, res) =>{
 
     const coverImageLocalPath = req.file?.path                    // for single file "req.file" and for multiple files "req.files"
 
@@ -517,7 +517,7 @@ export {
     getCurrentUser,
     updateUserDetails,
     updateUserAvatar,
-    updateCoverImageAvatar,
+    updateCoverImage,
     getUserChannelProfile,
     getWatchHistory
 }
